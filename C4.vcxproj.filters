@@ -24,6 +24,9 @@
     <ClCompile Include="connectfour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="board.h">
@@ -32,5 +35,16 @@
     <ClInclude Include="connectfour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="agent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="statespace.c4">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

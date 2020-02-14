@@ -4,17 +4,91 @@ using namespace std;
 
 ostream& operator<<(ostream& stream, const Board& b)
 {
-	for (Board::z i = 0; i < 42; i++)
+	stream << "  1 2 3 4 5 6 7 \n";
+	for (Board::z index = 0; index < 42; index++)
 	{
-		cout << '|' << b.b[i];
-		if ((i + 1) % 7 == 0)
+		if (index % 7 == 0)
 		{
-			cout << "|\n";
+			stream << (char)('a' + index / 7);
+		}
+		stream << '|' << b.b[index];
+		if ((index + 1) % 7 == 0)
+		{
+			stream << "|\n";
 		}
 	}
 	return stream;
 }
-void Board::Place(char c, z column)
+fstream& operator<<(fstream& filestream, const Board& b)
+{
+	for (Board::z index = 0; index < 42; index++)
+	{
+		filestream << b.b[index];
+	}
+	return filestream;
+}
+fstream& operator>>(fstream& filestream, Board& b)
+{
+	for (Board::z index = 0; index < 42; index++)
+	{
+		filestream.get(b.b[index]);
+	}
+	return filestream;
+}
+ofstream& operator<<(ofstream& filestream, const Board& b)
+{
+	for (Board::z index = 0; index < 42; index++)
+	{
+		filestream << b.b[index];
+	}
+	return filestream;
+}
+ifstream& operator>>(ifstream& filestream, Board& b)
+{
+	for (Board::z index = 0; index < 42; index++)
+	{
+		filestream.get(b.b[index]);
+	}
+	return filestream;
+}
+Board::Board()
+{
+	for (z index = 0; index < 42; index++)
+	{
+		b[index] = ' ';
+	}
+}
+Board::Board(const Board& other)
+{
+	for (z index = 0; index < 42; index++)
+	{
+		b[index] = other.b[index];
+	}
+}
+Board::Board(Board&& other) noexcept
+{
+	b = other.b;
+	other.b = nullptr;
+}
+Board& Board::operator=(const Board& other)
+{
+	for (z index = 0; index < 42; index++)
+	{
+		b[index] = other.b[index];
+	}
+	return *this;
+}
+Board& Board::operator=(Board&& other) noexcept
+{
+	b = other.b;
+	other.b = nullptr;
+	return *this;
+}
+Board::~Board()
+{
+	delete[] b;
+}
+Board& Board::Place(char c, z column)
 {
 	if (column < 1 || 7 < column)
 	{
@@ -23,11 +97,11 @@ void Board::Place(char c, z column)
 	else
 	{
 		bool placed = false;
-		for (z i = 0; i < 6; i++)
+		for (z row = 0; row < 6; row++)
 		{
-			if (b[35 - 7 * i + column - 1] == ' ')
+			if (b[35 - 7 * row + column - 1] == ' ')
 			{
-				b[35 - 7 * i + column - 1] = c;
+				b[35 - 7 * row + column - 1] = c;
 				placed = true;
 				break;
 			}
@@ -37,38 +111,39 @@ void Board::Place(char c, z column)
 			throw full_column();
 		}
 	}
+	return *this;
 }
 char Board::Winner() const noexcept
 {
-	for (z i = 0; i < 7; i++)
+	for (z column = 0; column < 7; column++)
 	{
-		for (z j = 0; j < 6; j++)
+		for (z row = 0; row < 6; row++)
 		{
-			if (j < 3)
+			if (row < 3)
 			{
-				if (b[i + 7 * j] != ' ' && b[i + 7 * j] == b[i + 7 * j + 7] && b[i + 7 * j] == b[i + 7 * j + 14] && b[i + 7 * j] == b[i + 7 * j + 21])
+				if (b[column + 7 * row] != ' ' && b[column + 7 * row] == b[column + 7 * row + 7] && b[column + 7 * row] == b[column + 7 * row + 14] && b[column + 7 * row] == b[column + 7 * row + 21])
 				{
-					return b[i + 7 * j];
+					return b[column + 7 * row];
 				}
 			}
-			if (i < 4)
+			if (column < 4)
 			{
-				if (b[i + 7 * j] != ' ' && b[i + 7 * j] == b[i + 7 * j + 1] && b[i + 7 * j] == b[i + 7 * j + 2] && b[i + 7 * j] == b[i + 7 * j + 3])
+				if (b[column + 7 * row] != ' ' && b[column + 7 * row] == b[column + 7 * row + 1] && b[column + 7 * row] == b[column + 7 * row + 2] && b[column + 7 * row] == b[column + 7 * row + 3])
 				{
-					return b[i + 7 * j];
+					return b[column + 7 * row];
 				}
-				if (j < 3)
+				if (row < 3)
 				{
-					if (b[i + 7 * j] != ' ' && b[i + 7 * j] == b[i + 7 * j + 8] && b[i + 7 * j] == b[i + 7 * j + 16] && b[i + 7 * j] == b[i + 7 * j + 24])
+					if (b[column + 7 * row] != ' ' && b[column + 7 * row] == b[column + 7 * row + 8] && b[column + 7 * row] == b[column + 7 * row + 16] && b[column + 7 * row] == b[column + 7 * row + 24])
 					{
-						return b[i + 7 * j];
+						return b[column + 7 * row];
 					}
 				}
 				else
 				{
-					if (b[i + 7 * j] != ' ' && b[i + 7 * j] == b[i + 7 * j - 6] && b[i + 7 * j] == b[i + 7 * j - 12] && b[i + 7 * j] == b[i + 7 * j - 18])
+					if (b[column + 7 * row] != ' ' && b[column + 7 * row] == b[column + 7 * row - 6] && b[column + 7 * row] == b[column + 7 * row - 12] && b[column + 7 * row] == b[column + 7 * row - 18])
 					{
-						return b[i + 7 * j];
+						return b[column + 7 * row];
 					}
 				}
 			}
@@ -76,11 +151,58 @@ char Board::Winner() const noexcept
 	}
 	return ' ';
 }
+char Board::MarkWinner() noexcept
+{
+	char c = ' ';
+	for (z column = 0; column < 7; column++)
+	{
+		for (z row = 0; row < 6; row++)
+		{
+			if (row < 3)
+			{
+				if (b[column + 7 * row] != ' ' && b[column + 7 * row] == b[column + 7 * row + 7] && b[column + 7 * row] == b[column + 7 * row + 14] && b[column + 7 * row] == b[column + 7 * row + 21])
+				{
+					c = b[column + 7 * row];
+					b[column + 7 * row] = b[column + 7 * row + 7] = b[column + 7 * row + 14] = b[column + 7 * row + 21] = toupper(c);
+					return c;
+				}
+			}
+			if (column < 4)
+			{
+				if (b[column + 7 * row] != ' ' && b[column + 7 * row] == b[column + 7 * row + 1] && b[column + 7 * row] == b[column + 7 * row + 2] && b[column + 7 * row] == b[column + 7 * row + 3])
+				{
+					c = b[column + 7 * row];
+					b[column + 7 * row] = b[column + 7 * row + 1] = b[column + 7 * row + 2] = b[column + 7 * row + 3] = toupper(c);
+					return c;
+				}
+				if (row < 3)
+				{
+					if (b[column + 7 * row] != ' ' && b[column + 7 * row] == b[column + 7 * row + 8] && b[column + 7 * row] == b[column + 7 * row + 16] && b[column + 7 * row] == b[column + 7 * row + 24])
+					{
+						c = b[column + 7 * row];
+						b[column + 7 * row] = b[column + 7 * row + 8] = b[column + 7 * row + 16] = b[column + 7 * row + 24] = toupper(c);
+						return c;
+					}
+				}
+				else
+				{
+					if (b[column + 7 * row] != ' ' && b[column + 7 * row] == b[column + 7 * row - 6] && b[column + 7 * row] == b[column + 7 * row - 12] && b[column + 7 * row] == b[column + 7 * row - 18])
+					{
+						c = b[column + 7 * row];
+						b[column + 7 * row] = b[column + 7 * row - 6] = b[column + 7 * row - 12] = b[column + 7 * row - 18] = toupper(c);
+						return c;
+					}
+				}
+			}
+		}
+	}
+	return c;
+}
 bool Board::IsFull() const noexcept
 {
-	for (z i = 0; i < 42; i++)
+	for (z index = 0; index < 42; index++)
 	{
-		if (b[i] == ' ')
+		if (b[index] == ' ')
 		{
 			return false;
 		}
@@ -102,4 +224,16 @@ bool Board::IsFullColumn(z column) const
 			b[28 + column - 1] != ' ' &&
 			b[35 + column - 1] != ' ';
 	}
+}
+Board::z Board::PositionsLeft() const noexcept
+{
+	z count = 0;
+	for (z index = 0; index < 42; index++)
+	{
+		if (b[index] == ' ')
+		{
+			count++;
+		}
+	}
+	return count;
 }

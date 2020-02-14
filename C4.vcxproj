@@ -142,10 +142,16 @@
     <ClCompile Include="board.cpp" />
     <ClCompile Include="connectfour.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="random.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="agent.h" />
     <ClInclude Include="board.h" />
     <ClInclude Include="connectfour.h" />
+    <ClInclude Include="random.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="statespace.c4" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
