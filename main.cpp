@@ -13,10 +13,10 @@ vector<Board> GetSuccessors(Board);
 
 int main()
 {
-	/*ConnectFour gameManager;
-	gameManager.Play();*/
+	ConnectFour gameManager;
+	gameManager.Play();
 
-	GenerateStateSpace();
+	/*GenerateStateSpace();*/
 
 	system("pause");
 	return EXIT_SUCCESS;
@@ -45,7 +45,7 @@ void GenerateStateSpace()
 				<< "Fringe Size:\t\t\t" << fringe.size() << endl
 				<< "Current Depth:\t\t\t" << depth << endl
 				<< "Depth 1 States in Fringe:\t" << count_if(fringe.cbegin(), fringe.cend(), [](pair<Board, Board::z> item) {return item.second == 1; }) << endl
-				<< "Time Elapsed (s):\t\t" << duration_cast<duration<double>>(chrono::system_clock::now() - start).count() << endl
+				<< "Time Elapsed (s):\t\t" << duration_cast<duration<double>>(system_clock::now() - start).count() << endl
 				<< endl;
 		}
 
