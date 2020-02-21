@@ -5,6 +5,8 @@
 #include <chrono>
 #include "board.h"
 #include "connectfour.h"
+#include "rpo.h"
+#include "random.h"
 
 using namespace std;
 
@@ -13,10 +15,12 @@ vector<Board> GetSuccessors(Board);
 
 int main()
 {
-	ConnectFour gameManager;
-	gameManager.Play();
+	Random Caprice;
+	RpO Eclair;
+	ConnectFour::TrainSingle(Eclair, Caprice, (int)1e4);
 
-	/*GenerateStateSpace();*/
+	// Don't try this unless have supercomputer.
+	// GenerateStateSpace();
 
 	system("pause");
 	return EXIT_SUCCESS;

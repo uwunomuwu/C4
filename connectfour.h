@@ -1,16 +1,17 @@
 #pragma once
 
+#include "asrlc4.h"
+
 class ConnectFour
 {
 public:
-	constexpr ConnectFour() = default;
-	~ConnectFour() = default;
-	void Play();
-	void Train();
+	static void Play();
+	static void TrainDouble(ASRLC4&, ASRLC4&, size_t);
+	static void TrainSingle(ASRLC4&, Agent&, size_t);
 
 private:
-	void HumanVsHuman();
-	void HumanVsAI();
-	void AIVsAI();
+	static void HumanVsHuman();
+	static void HumanVsAI();
+	static void AIVsAI();
 
 };

@@ -143,12 +143,15 @@
     <ClCompile Include="connectfour.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="random.cpp" />
+    <ClCompile Include="rpo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="agent.h" />
+    <ClInclude Include="asrlc4.h" />
     <ClInclude Include="board.h" />
     <ClInclude Include="connectfour.h" />
     <ClInclude Include="random.h" />
+    <ClInclude Include="rpo.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="statespace.c4" />

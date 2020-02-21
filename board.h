@@ -44,8 +44,37 @@ public:
 	bool IsFullColumn(z) const;
 	bool IsFull() const noexcept;
 	z PositionsLeft() const noexcept;
+	bool operator==(const Board&) const;
+	char At(z) const;
 
 private:
 	char* b = new char[42];
 
+};
+
+template<>
+struct hash<Board>
+{
+	size_t operator()(const Board& b) const
+	{
+		size_t result = 0;
+		size_t letter = 0;
+		for (Board::z index = 0; index < 42; index++)
+		{
+			switch (b.At(index))
+			{
+			case ' ':
+				letter = 0;
+				break;
+			case 'x':
+				letter = 1;
+				break;
+			case 'o':
+				letter = 2;
+				break;
+			}
+			result += (letter << (2 * index));
+		}
+		return result;
+	}
 };

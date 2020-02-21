@@ -237,3 +237,20 @@ Board::z Board::PositionsLeft() const noexcept
 	}
 	return count;
 }
+
+bool Board::operator==(const Board& other) const
+{
+	for (z index = 0; index < 42; index++)
+	{
+		if (b[index] != other.b[index])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+char Board::At(z index) const
+{
+	return b[index];
+}
