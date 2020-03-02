@@ -21,12 +21,12 @@ int main()
 	for (int i = 0; i < 10; i++)
 	{
 		b.Place('x', caprice.TakeTurn(b));
-		b.Place('o', caprice.TakeTurn(b));
+		//b.Place('o', caprice.TakeTurn(b));
 	}
 	
 	cout << b << endl;
-	cout << "x: " << b.Doubles('x') << endl;
-	cout << "o: " << b.Doubles('o') << endl;
+	cout << "x: " << b.Triples('x') << endl;
+	cout << "o: " << b.Triples('o') << endl;
 
 	// Don't try this unless have supercomputer.
 	// GenerateStateSpace();

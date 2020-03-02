@@ -48,6 +48,7 @@ public:
 	bool operator==(const Board&) const;
 	char At(z) const;
 	z Doubles(char) const;
+	z Triples(char) const;
 
 private:
 	char* b = new char[42];

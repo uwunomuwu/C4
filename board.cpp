@@ -356,6 +356,79 @@ Board::z Board::Doubles(char c) const
 	return count;
 }
 
+Board::z Board::Triples(char c) const
+{
+	z count = 0;
+	for (z index = 0; index < 42; index++)
+	{
+		if (b[41 - index] == c)
+		{
+			if ((41 - index) % 7 > 1 &&
+				b[41 - index - 1] == c &&
+				b[41 - index - 2] == c)
+			{
+				if ((41 - index) % 7 > 2 &&
+					b[41 - index - 3] == ' ')
+				{
+					count++;
+				}
+				else if ((41 - index) % 7 < 6 &&
+					b[41 - index + 1] == ' ')
+				{
+					count++;
+				}
+			}
+			if ((41 - index) > 20 &&
+				b[41 - index - 7] == c &&
+				b[41 - index - 14] == c)
+			{
+				if (b[41 - index - 21] == ' ')
+				{
+					count++;
+				}
+			}
+			if ((41 - index) > 15 &&
+				(41 - index) % 7 > 1 &&
+				b[41 - index - 8] == c &&
+				b[41 - index - 16] == c)
+			{
+				if ((41 - index) > 23 &&
+					(41 - index) % 7 > 2 &&
+					b[41 - index - 24] == ' ')
+				{
+					count++;
+				}
+				else if ((41 - index) < 34 &&
+					(41 - index) % 7 < 6 &&
+					b[41 - index + 8] == ' ')
+				{
+					count++;
+				}
+			}
+			if ((41 - index) > 14 &&
+				(41 - index) < 39 &&
+				(41 - index) % 7 < 5 &&
+				b[41 - index - 6] == c &&
+				b[41 - index - 12] == c)
+			{
+				if ((41 - index) > 20 &&
+					(41 - index) % 7 < 4 &&
+					b[41 - index - 18] == ' ')
+				{
+					count++;
+				}
+				else if ((41 - index) < 33 &&
+					(41 - index) % 7 > 0 &&
+					b[41 - index + 6] == ' ')
+				{
+					count++;
+				}
+			}
+		}
+	}
+	return count;
+}
+
 bool Board::ValidIndex(z index) const
 {
 	return 0 <= index && index < 42;
