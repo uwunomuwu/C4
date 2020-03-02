@@ -15,9 +15,18 @@ vector<Board> GetSuccessors(Board);
 
 int main()
 {
-	Random Caprice;
-	RpO Eclair;
-	ConnectFour::TrainSingle(Eclair, Caprice, (int)1e4);
+	Board b;
+	Random caprice;
+
+	for (int i = 0; i < 10; i++)
+	{
+		b.Place('x', caprice.TakeTurn(b));
+		b.Place('o', caprice.TakeTurn(b));
+	}
+	
+	cout << b << endl;
+	cout << "x: " << b.Doubles('x') << endl;
+	cout << "o: " << b.Doubles('o') << endl;
 
 	// Don't try this unless have supercomputer.
 	// GenerateStateSpace();

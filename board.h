@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstdarg>
 
 using namespace std;
 
@@ -46,9 +47,11 @@ public:
 	z PositionsLeft() const noexcept;
 	bool operator==(const Board&) const;
 	char At(z) const;
+	z Doubles(char) const;
 
 private:
 	char* b = new char[42];
+	bool ValidIndex(z) const;
 
 };
 

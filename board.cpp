@@ -254,3 +254,109 @@ char Board::At(z index) const
 {
 	return b[index];
 }
+
+Board::z Board::Doubles(char c) const
+{
+	z count = 0;
+	for (z index = 0; index < 42; index++)
+	{
+		if (b[41 - index] == c)
+		{
+			if ((41 - index) % 7 > 0 &&
+				b[41 - index - 1] == c)
+			{
+				if ((41 - index) % 7 > 2 &&
+					b[41 - index - 2] == ' ' &&
+					b[41 - index - 3] == ' ')
+				{
+					count++;
+				}
+				else if ((41 - index) % 7 > 1 &&
+					(41 - index) % 7 < 6 &&
+					b[41 - index + 1] == ' ' &&
+					b[41 - index - 2] == ' ')
+				{
+					count++;
+				}
+				else if ((41 - index) % 7 < 5 &&
+					b[41 - index + 1] == ' ' &&
+					b[41 - index + 2] == ' ')
+				{
+					count++;
+				}
+			}
+			if ((41 - index) > 20 &&
+				b[41 - index - 7] == c)
+			{
+				if (b[41 - index - 14] == ' ' &&
+					b[41 - index - 21] == ' ')
+				{
+					count++;
+				}
+			}
+			if ((41 - index) > 7 &&
+				(41 - index) % 7 > 0 &&
+				b[41 - index - 8] == c)
+			{
+				if ((41 - index) > 23 &&
+					(41 - index) % 7 > 2 &&
+					b[41 - index - 16] == ' ' &&
+					b[41 - index - 24] == ' ')
+				{
+					count++;
+				}
+				else if ((41 - index) > 16 &&
+					(41 - index) < 34 &&
+					(41 - index) % 7 > 1 &&
+					(41 - index) % 7 < 6 &&
+					b[41 - index - 16] == ' ' &&
+					b[41 - index + 8] == ' ')
+				{
+					count++;
+				}
+				else if ((41 - index) < 26 &&
+					(41 - index) % 7 < 5 &&
+					b[41 - index + 8] == ' ' &&
+					b[41 - index + 16] == ' ')
+				{
+					count++;
+				}
+			}
+			if ((41 - index) > 8 &&
+				(41 - index) < 39 &&
+				(41 - index) % 7 < 6 &&
+				b[41 - index - 6] == c)
+			{
+				if ((41 - index) > 20 &&
+					(41 - index) % 7 < 4 &&
+					b[41 - index - 12] == ' ' &&
+					b[41 - index - 18] == ' ')
+				{
+					count++;
+				}
+				else if ((41 - index) > 14 &&
+					(41 - index) < 33 &&
+					(41 - index) % 7 > 0 &&
+					(41 - index) % 7 < 5 &&
+					b[41 - index - 12] == ' ' &&
+					b[41 - index + 6] == ' ')
+				{
+					count++;
+				}
+				else if ((41 - index) < 27 &&
+					(41 - index) % 7 > 1 &&
+					b[41 - index + 6] == ' ' &&
+					b[41 - index + 12] == ' ')
+				{
+					count++;
+				}
+			}
+		}
+	}
+	return count;
+}
+
+bool Board::ValidIndex(z index) const
+{
+	return 0 <= index && index < 42;
+}
