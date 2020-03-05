@@ -49,10 +49,14 @@ public:
 	char At(z) const;
 	z Doubles(char) const;
 	z Triples(char) const;
+	z SpaceDoubles(char) const;
+	z SpaceTriples(char) const;
 
 private:
 	char* b = new char[42];
 	bool ValidIndex(z) const;
+	static bool IsSpaceDouble(char, char, char, char, char);
+	static bool IsSpaceTriple(char, char, char, char, char);
 
 };
 

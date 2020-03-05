@@ -429,7 +429,165 @@ Board::z Board::Triples(char c) const
 	return count;
 }
 
+Board::z Board::SpaceDoubles(char c) const
+{
+	z counter = 0;
+	for (z column = 0; column < 7; column++)
+	{
+		for (z row = 0; row < 6; row++)
+		{
+			if (row < 3)
+			{
+				if (IsSpaceDouble(c, b[column + 7 * row], b[column + 7 * row + 7], b[column + 7 * row + 14], b[column + 7 * row + 21]))
+				{
+					counter++;
+				}
+			}
+			if (column < 4)
+			{
+				if (IsSpaceDouble(c, b[column + 7 * row], b[column + 7 * row + 1], b[column + 7 * row + 2], b[column + 7 * row + 3]))
+				{
+					counter++;
+				}
+				if (row < 3)
+				{
+					if (IsSpaceDouble(c, b[column + 7 * row], b[column + 7 * row + 8], b[column + 7 * row + 16], b[column + 7 * row + 24]))
+					{
+						counter++;
+					}
+				}
+				else
+				{
+					if (IsSpaceDouble(c, b[column + 7 * row], b[column + 7 * row - 6], b[column + 7 * row - 12], b[column + 7 * row - 18]))
+					{
+						counter++;
+					}
+				}
+			}
+		}
+	}
+	return counter;
+}
+
+Board::z Board::SpaceTriples(char c) const
+{
+	z counter = 0;
+	for (z column = 0; column < 7; column++)
+	{
+		for (z row = 0; row < 6; row++)
+		{
+			if (row < 3)
+			{
+				if (IsSpaceTriple(c, b[column + 7 * row], b[column + 7 * row + 7], b[column + 7 * row + 14], b[column + 7 * row + 21]))
+				{
+					counter++;
+				}
+			}
+			if (column < 4)
+			{
+				if (IsSpaceTriple(c, b[column + 7 * row], b[column + 7 * row + 1], b[column + 7 * row + 2], b[column + 7 * row + 3]))
+				{
+					counter++;
+				}
+				if (row < 3)
+				{
+					if (IsSpaceTriple(c, b[column + 7 * row], b[column + 7 * row + 8], b[column + 7 * row + 16], b[column + 7 * row + 24]))
+					{
+						counter++;
+					}
+				}
+				else
+				{
+					if (IsSpaceTriple(c, b[column + 7 * row], b[column + 7 * row - 6], b[column + 7 * row - 12], b[column + 7 * row - 18]))
+					{
+						counter++;
+					}
+				}
+			}
+		}
+	}
+	return counter;
+}
+
 bool Board::ValidIndex(z index) const
 {
 	return 0 <= index && index < 42;
+}
+
+bool Board::IsSpaceDouble(char check, char c1, char c2, char c3, char c4)
+{
+	z letters = 0;
+	z spaces = 0;
+	if (c1 == check)
+	{
+		letters++;
+	}
+	else if (c1 == ' ')
+	{
+		spaces++;
+	}
+	if (c2 == check)
+	{
+		letters++;
+	}
+	else if (c2 == ' ')
+	{
+		spaces++;
+	}
+	if (c3 == check)
+	{
+		letters++;
+	}
+	else if (c3 == ' ')
+	{
+		spaces++;
+	}
+	if (c4 == check)
+	{
+		letters++;
+	}
+	else if (c4 == ' ')
+	{
+		spaces++;
+	}
+	return (letters == 2 && spaces == 2);
+}
+
+bool Board::IsSpaceTriple(char check, char c1, char c2, char c3, char c4)
+{
+	z letters = 0;
+	z spaces = 0;
+	if (c1 == check)
+	{
+		letters++;
+	}
+	else if (c1 == ' ')
+	{
+		spaces++;
+	}
+	if (c2 == check)
+	{
+		letters++;
+	}
+	else if (c2 == ' ')
+	{
+		spaces++;
+	}
+	if (c3 == check)
+	{
+		letters++;
+	}
+	else if (c3 == ' ')
+	{
+		spaces++;
+	}
+	if (c4 == check)
+	{
+		letters++;
+	}
+	else if (c4 == ' ')
+	{
+		spaces++;
+	}
+	return (letters == 3 && spaces == 1);
 }
