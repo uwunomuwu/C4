@@ -509,6 +509,86 @@ Board::z Board::SpaceTriples(char c) const
 	return counter;
 }
 
+Board::z Board::PenultimateTriples(char c) const
+{
+	z counter = 0;
+	for (z column = 0; column < 7; column++)
+	{
+		for (z row = 0; row < 6; row++)
+		{
+			if (row < 3)
+			{
+				if (IsPenultimateTriple(c, column + 7 * row, column + 7 * row + 7, column + 7 * row + 14, column + 7 * row + 21))
+				{
+					counter++;
+				}
+			}
+			if (column < 4)
+			{
+				if (IsPenultimateTriple(c, column + 7 * row, column + 7 * row + 1, column + 7 * row + 2, column + 7 * row + 3))
+				{
+					counter++;
+				}
+				if (row < 3)
+				{
+					if (IsPenultimateTriple(c, column + 7 * row, column + 7 * row + 8, column + 7 * row + 16, column + 7 * row + 24))
+					{
+						counter++;
+					}
+				}
+				else
+				{
+					if (IsPenultimateTriple(c, column + 7 * row, column + 7 * row - 6, column + 7 * row - 12, column + 7 * row - 18))
+					{
+						counter++;
+					}
+				}
+			}
+		}
+	}
+	return counter;
+}
+
+Board::z Board::AntepenultimateTriples(char c) const
+{
+	z counter = 0;
+	for (z column = 0; column < 7; column++)
+	{
+		for (z row = 0; row < 6; row++)
+		{
+			if (row < 3)
+			{
+				if (IsAntepenultimateTriple(c, column + 7 * row, column + 7 * row + 7, column + 7 * row + 14, column + 7 * row + 21))
+				{
+					counter++;
+				}
+			}
+			if (column < 4)
+			{
+				if (IsAntepenultimateTriple(c, column + 7 * row, column + 7 * row + 1, column + 7 * row + 2, column + 7 * row + 3))
+				{
+					counter++;
+				}
+				if (row < 3)
+				{
+					if (IsAntepenultimateTriple(c, column + 7 * row, column + 7 * row + 8, column + 7 * row + 16, column + 7 * row + 24))
+					{
+						counter++;
+					}
+				}
+				else
+				{
+					if (IsAntepenultimateTriple(c, column + 7 * row, column + 7 * row - 6, column + 7 * row - 12, column + 7 * row - 18))
+					{
+						counter++;
+					}
+				}
+			}
+		}
+	}
+	return counter;
+}
+
 bool Board::ValidIndex(z index) const
 {
 	return 0 <= index && index < 42;
@@ -590,4 +670,114 @@ bool Board::IsSpaceTriple(char check, char c1, char c2, char c3, char c4)
 		spaces++;
 	}
 	return (letters == 3 && spaces == 1);
+}
+
+bool Board::IsPenultimateTriple(char check, z index1, z index2, z index3, z index4) const
+{
+	z letters = 0;
+	z spaces = 0;
+	z spaceIndex = 42;
+	if (b[index1] == check)
+	{
+		letters++;
+	}
+	else if (b[index1] == ' ')
+	{
+		spaces++;
+		spaceIndex = index1;
+	}
+	if (b[index2] == check)
+	{
+		letters++;
+	}
+	else if (b[index2] == ' ')
+	{
+		spaces++;
+		spaceIndex = index2;
+	}
+	if (b[index3] == check)
+	{
+		letters++;
+	}
+	else if (b[index3] == ' ')
+	{
+		spaces++;
+		spaceIndex = index3;
+	}
+	if (b[index4] == check)
+	{
+		letters++;
+	}
+	else if (b[index4] == ' ')
+	{
+		spaces++;
+		spaceIndex = index4;
+	}
+	if (letters == 3 && spaces == 1)
+	{
+		if (ValidIndex(spaceIndex + 7))
+		{
+			return b[spaceIndex + 7] != ' ';
+		}
+		else
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Board::IsAntepenultimateTriple(char check, z index1, z index2, z index3, z index4) const
+{
+	z letters = 0;
+	z spaces = 0;
+	z spaceIndex = 42;
+	if (b[index1] == check)
+	{
+		letters++;
+	}
+	else if (b[index1] == ' ')
+	{
+		spaces++;
+		spaceIndex = index1;
+	}
+	if (b[index2] == check)
+	{
+		letters++;
+	}
+	else if (b[index2] == ' ')
+	{
+		spaces++;
+		spaceIndex = index2;
+	}
+	if (b[index3] == check)
+	{
+		letters++;
+	}
+	else if (b[index3] == ' ')
+	{
+		spaces++;
+		spaceIndex = index3;
+	}
+	if (b[index4] == check)
+	{
+		letters++;
+	}
+	else if (b[index4] == ' ')
+	{
+		spaces++;
+		spaceIndex = index4;
+	}
+	if (letters == 3 && spaces == 1 && ValidIndex(spaceIndex + 7) && b[spaceIndex + 7] == ' ')
+	{
+		if (ValidIndex(spaceIndex + 14))
+		{
+			return b[spaceIndex + 14] != ' ';
+		}
+		else
+		{
+			return true;
+		}
+	}
+	return false;
 }

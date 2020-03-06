@@ -18,15 +18,15 @@ int main()
 	Board b;
 	Random caprice;
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 15; i++)
 	{
 		b.Place('x', caprice.TakeTurn(b));
 		b.Place('o', caprice.TakeTurn(b));
 	}
 	
 	cout << b << endl;
-	cout << "x: " << b.SpaceDoubles('x') << endl;
-	cout << "o: " << b.SpaceDoubles('o') << endl;
+	cout << "x: " << b.AntepenultimateTriples('x') << endl;
+	cout << "o: " << b.AntepenultimateTriples('o') << endl;
 
 	// Don't try this unless have supercomputer.
 	// GenerateStateSpace();

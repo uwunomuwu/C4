@@ -51,12 +51,16 @@ public:
 	z Triples(char) const;
 	z SpaceDoubles(char) const;
 	z SpaceTriples(char) const;
+	z PenultimateTriples(char) const;
+	z AntepenultimateTriples(char) const;
 
 private:
 	char* b = new char[42];
 	bool ValidIndex(z) const;
 	static bool IsSpaceDouble(char, char, char, char, char);
 	static bool IsSpaceTriple(char, char, char, char, char);
+	bool IsPenultimateTriple(char, z, z, z, z) const;
+	bool IsAntepenultimateTriple(char, z, z, z, z) const;
 
 };
 
