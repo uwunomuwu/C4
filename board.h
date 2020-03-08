@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdarg>
+#include <vector>
 
 using namespace std;
 
@@ -53,6 +54,7 @@ public:
 	z SpaceTriples(char) const;
 	z PenultimateTriples(char) const;
 	z AntepenultimateTriples(char) const;
+	vector<pair<Board, z>> Successors() const;
 
 private:
 	char* b = new char[42];

@@ -3,6 +3,8 @@
 #include "agent.h"
 #include "random.h"
 #include "rpo.h"
+#include "minimax_defensive.h"
+#include "minimax_all.h"
 #include <iostream>
 #include <string>
 #include <random>
@@ -150,6 +152,92 @@ void ConnectFour::TrainSingle(ASRLC4& agent1, Agent& agent2, size_t games)
 		}
 	}
 }
+void ConnectFour::TestDouble(Agent& agent1, Agent& agent2, size_t games)
+{
+	random_device seeder;
+	minstd_rand rng(seeder());
+	size_t agent1Wins = 0, agent2Wins = 0, ties = 0;
+	for (size_t gameCounter = 0; gameCounter < games; gameCounter++)
+	{
+		if ((games / 100 != 0) && !(gameCounter % (games / 100)))
+		{
+			cout << "Games Played:\t" << gameCounter << "\n"
+				<< "Agent 1 Wins:\t" << (double)agent1Wins / gameCounter * 100 << "%\n"
+				<< "Agent 2 Wins:\t" << (double)agent2Wins / gameCounter * 100 << "%\n"
+				<< "Ties:\t\t" << (double)ties / gameCounter * 100 << "%\n"
+				<< endl;
+		}
+		bool agent1First = rng() % 2;
+		Board b;
+		for (unsigned short i = 0; b.Winner() == ' ' && !b.IsFull(); i++)
+		{
+			if ((bool)(i % 2) != agent1First)
+			{
+				b.Place(agent1First ? 'x' : 'o', agent1.TakeTurn(b));
+			}
+			else
+			{
+				b.Place(agent1First ? 'o' : 'x', agent2.TakeTurn(b));
+			}
+		}
+		if (b.Winner() == 'x')
+		{
+			agent1Wins += agent1First ? 1 : 0;
+			agent2Wins += agent1First ? 0 : 1;
+		}
+		else if (b.Winner() == 'o')
+		{
+			agent1Wins += agent1First ? 0 : 1;
+			agent2Wins += agent1First ? 1 : 0;
+		}
+		else
+		{
+			ties++;
+		}
+	}
+	cout << "Games Played:\t" << games << "\n"
+		<< "Agent 1 Wins:\t" << (double)agent1Wins / games * 100 << "%\n"
+		<< "Agent 2 Wins:\t" << (double)agent2Wins / games * 100 << "%\n"
+		<< "Ties:\t\t" << (double)ties / games * 100 << "%\n"
+		<< endl;
+}
+void ConnectFour::PlayDouble(Agent& agent1, Agent& agent2)
+{
+	random_device seeder;
+	minstd_rand rng(seeder());
+	size_t agent1Wins = 0, agent2Wins = 0, ties = 0;
+	bool agent1First = true;
+	Board b;
+	for (unsigned short i = 0; b.Winner() == ' ' && !b.IsFull(); i++)
+	{
+		cout << b << endl;
+
+		if ((bool)(i % 2) != agent1First)
+		{
+			b.Place(agent1First ? 'x' : 'o', agent1.TakeTurn(b));
+		}
+		else
+		{
+			b.Place(agent1First ? 'o' : 'x', agent2.TakeTurn(b));
+		}
+	}
+	if (b.Winner() == 'x')
+	{
+		agent1Wins += agent1First ? 1 : 0;
+		agent2Wins += agent1First ? 0 : 1;
+	}
+	else if (b.Winner() == 'o')
+	{
+		agent1Wins += agent1First ? 0 : 1;
+		agent2Wins += agent1First ? 1 : 0;
+	}
+	else
+	{
+		ties++;
+	}
+
+	cout << b << endl;
+}
 void ConnectFour::HumanVsHuman()
 {
 	system("cls");
@@ -207,17 +295,19 @@ void ConnectFour::HumanVsAI()
 		<< "\n"
 		<< "To select an AI, enter the number left of the AI\'s name.\n"
 		<< "1) Caprice\n"
-		<< "2) Eclair\n"
+		<< "2) Dorothy\n"
+		<< "3) Beatrice\n"
 		<< endl;
 	getline(cin, input);
 	while (input.length() != 1 ||
 		!isdigit(input[0]) ||
-		stoi(input) < 1 || 2 < stoi(input))
+		stoi(input) < 1 || 3 < stoi(input))
 	{
 		cout << "\nThat was not a valid option.\n"
 			<< "To select an AI, enter the number left of the AI\'s name.\n"
 			<< "1) Caprice\n"
-			<< "2) Eclair\n"
+			<< "2) Dorothy\n"
+			<< "3) Beatrice\n"
 			<< endl;
 		getline(cin, input);
 	}
@@ -227,7 +317,9 @@ void ConnectFour::HumanVsAI()
 		agent = new Random;
 		break;
 	case 2:
-		agent = new RpO;
+		agent = new MinimaxDefensive;
+	case 3:
+		agent = new MinimaxAll;
 	}
 	system("cls");
 	cout << "Human vs AI\n"

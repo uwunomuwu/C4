@@ -589,6 +589,28 @@ Board::z Board::AntepenultimateTriples(char c) const
 	return counter;
 }
 
+vector<pair<Board, Board::z>> Board::Successors() const
+{
+	vector<pair<Board, z>> successors;
+
+	char nextPiece = PositionsLeft() % 2 ? 'o' : 'x';
+
+	if (Winner() == ' ')
+	{
+		Board copy;
+		for (Board::z column = 1; column < 8; column++)
+		{
+			if (!IsFullColumn(column))
+			{
+				copy = *this;
+				successors.emplace_back(make_pair(copy.Place(nextPiece, column), column));
+			}
+		}
+	}
+
+	return successors;
+}
+
 bool Board::ValidIndex(z index) const
 {
 	return 0 <= index && index < 42;

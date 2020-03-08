@@ -7,6 +7,9 @@
 #include "connectfour.h"
 #include "rpo.h"
 #include "random.h"
+#include "minimax_defensive.h"
+#include "minimax_offensive.h"
+#include "minimax_all.h"
 
 using namespace std;
 
@@ -15,18 +18,12 @@ vector<Board> GetSuccessors(Board);
 
 int main()
 {
-	Board b;
-	Random caprice;
+	MinimaxAll allAgent;
+	MinimaxDefensive defensiveAgent;
+	Random randomAgent;
+	//ConnectFour::TestDouble(allAgent, randomAgent, 1000);
 
-	for (int i = 0; i < 15; i++)
-	{
-		b.Place('x', caprice.TakeTurn(b));
-		b.Place('o', caprice.TakeTurn(b));
-	}
-	
-	cout << b << endl;
-	cout << "x: " << b.AntepenultimateTriples('x') << endl;
-	cout << "o: " << b.AntepenultimateTriples('o') << endl;
+	ConnectFour::Play();
 
 	// Don't try this unless have supercomputer.
 	// GenerateStateSpace();
