@@ -45,6 +45,15 @@
     <ClCompile Include="minimax_all.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="minimax_tuned_d1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="minimax_tuned_d2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="minimax_tuned_d3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="board.h">
@@ -78,6 +87,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="minimax_all.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="minimax_tuned_d1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="minimax_tuned_d2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="minimax_tuned_d3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

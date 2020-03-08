@@ -5,6 +5,7 @@
 #include "rpo.h"
 #include "minimax_defensive.h"
 #include "minimax_all.h"
+#include "minimax_tuned_d1.h"
 #include <iostream>
 #include <string>
 #include <random>
@@ -157,10 +158,12 @@ void ConnectFour::TestDouble(Agent& agent1, Agent& agent2, size_t games)
 	random_device seeder;
 	minstd_rand rng(seeder());
 	size_t agent1Wins = 0, agent2Wins = 0, ties = 0;
+	double reportsDisplayed = 0;
 	for (size_t gameCounter = 0; gameCounter < games; gameCounter++)
 	{
-		if ((games / 100 != 0) && !(gameCounter % (games / 100)))
+		if ((double)gameCounter / games >= reportsDisplayed / 100)
 		{
+			reportsDisplayed++;
 			cout << "Games Played:\t" << gameCounter << "\n"
 				<< "Agent 1 Wins:\t" << (double)agent1Wins / gameCounter * 100 << "%\n"
 				<< "Agent 2 Wins:\t" << (double)agent2Wins / gameCounter * 100 << "%\n"
@@ -238,7 +241,14 @@ void ConnectFour::PlayDouble(Agent& agent1, Agent& agent2)
 
 	cout << b << endl;
 }
-Minimax ConnectFour::Evolve(size_t populationSize, size_t gamesPerCompetition, size_t generations, long double startingWeight, long double mixingRatio, long double mutationRate)
+Minimax ConnectFour::Evolve(size_t searchDepth,
+	size_t populationSize,
+	size_t gamesPerCompetition,
+	size_t generations,
+	long double startingWeight,
+	long double mixingRatio,
+	long double mutationRate
+)
 {
 	if (populationSize < 2)
 	{
@@ -260,7 +270,7 @@ Minimax ConnectFour::Evolve(size_t populationSize, size_t gamesPerCompetition, s
 
 	for (size_t populationCounter = 0; populationCounter < populationSize; populationCounter++)
 	{
-		agents.emplace_back(1,
+		agents.emplace_back(searchDepth,
 			startingWeight * rng() / rng.max(), startingWeight * rng() / rng.max(), startingWeight * rng() / rng.max(), startingWeight * rng() / rng.max(),
 			startingWeight * rng() / rng.max(), startingWeight * rng() / rng.max(), startingWeight * rng() / rng.max(), startingWeight * rng() / rng.max(),
 			startingWeight * rng() / rng.max(), startingWeight * rng() / rng.max(), startingWeight * rng() / rng.max(), startingWeight * rng() / rng.max(),
@@ -310,7 +320,7 @@ Minimax ConnectFour::Evolve(size_t populationSize, size_t gamesPerCompetition, s
 
 	for (size_t geneCounter = 0; geneCounter < agents[maxFitnessIndex].Weights().size(); geneCounter++)
 	{
-		cout << agents[maxFitnessIndex].Weights()[geneCounter] << ' ';
+		cout << agents[maxFitnessIndex].Weights()[geneCounter] << ", ";
 	}
 	cout << "\n" << endl;
 
@@ -321,10 +331,12 @@ Minimax ConnectFour::Evolve(size_t populationSize, size_t gamesPerCompetition, s
 		zygote = Breed(agents[maxFitnessIndex].Weights(), agents[secondFitnessIndex].Weights(), mixingRatio);
 
 		// initalize next generation
-		agents.clear();
 		for (size_t populationCounter = 0; populationCounter < populationSize; populationCounter++)
 		{
-			agents.emplace_back(1, Mutate(zygote, mutationRate));
+			if (populationCounter != maxFitnessIndex)
+			{
+				agents[populationCounter] = Minimax(searchDepth, Mutate(zygote, mutationRate));
+			}
 		}
 
 		// compete and record fitnesses as # of wins
@@ -369,14 +381,14 @@ Minimax ConnectFour::Evolve(size_t populationSize, size_t gamesPerCompetition, s
 
 		for (size_t geneCounter = 0; geneCounter < agents[maxFitnessIndex].Weights().size(); geneCounter++)
 		{
-			cout << agents[maxFitnessIndex].Weights()[geneCounter] << ' ';
+			cout << agents[maxFitnessIndex].Weights()[geneCounter] << ", ";
 		}
 		cout << "\n" << endl;
 	}
 
 	return agents[maxFitnessIndex];
 }
-Minimax ConnectFour::EvolveAgent(const Minimax& parent, size_t populationSize, size_t gamesPerCompetition, size_t generations, long double mixingRatio, long double mutationRate)
+Minimax ConnectFour::EvolveAgent(const Minimax& parent, size_t searchDepth, size_t populationSize, size_t gamesPerCompetition, size_t generations, long double mixingRatio, long double mutationRate)
 {
 	if (populationSize < 2)
 	{
@@ -386,7 +398,7 @@ Minimax ConnectFour::EvolveAgent(const Minimax& parent, size_t populationSize, s
 	random_device seeder;
 	minstd_rand rng(seeder());
 
-	vector<Minimax> agents = { parent };
+	vector<Minimax> agents;
 	vector<size_t> fitnesses(populationSize);
 	pair<size_t, size_t> roundWins;
 	vector<EvaluationFunction::utility> zygote;
@@ -396,6 +408,58 @@ Minimax ConnectFour::EvolveAgent(const Minimax& parent, size_t populationSize, s
 	size_t secondFitness;
 	size_t secondFitnessIndex = 0;
 
+	agents.emplace_back(parent);
+	for (size_t populationCounter = 1; populationCounter < populationSize; populationCounter++)
+	{
+		agents.emplace_back(searchDepth, Mutate(parent.Weights(), mutationRate));
+	}
+
+	// compete and record fitnesses as # of wins
+	fitnesses.clear();
+	fitnesses.resize(populationSize);
+	for (size_t populationCounter = 0; populationCounter < populationSize; populationCounter++)
+	{
+		for (size_t opponentCounter = populationCounter + 1; opponentCounter < populationSize; opponentCounter++)
+		{
+			roundWins = Compete(agents[populationCounter], agents[opponentCounter], gamesPerCompetition);
+			fitnesses[populationCounter] += roundWins.first;
+			fitnesses[opponentCounter] += roundWins.second;
+		}
+	}
+
+	// find parents for next generation
+	maxFitness = secondFitness = fitnesses[0];
+	maxFitnessIndex = secondFitnessIndex = 0;
+	for (size_t populationCounter = 1; populationCounter < populationSize; populationCounter++)
+	{
+		if (fitnesses[populationCounter] > maxFitness)
+		{
+			if (secondFitnessIndex != maxFitnessIndex)
+			{
+				secondFitness = maxFitness;
+				secondFitnessIndex = maxFitnessIndex;
+			}
+			maxFitness = fitnesses[populationCounter];
+			maxFitnessIndex = populationCounter;
+		}
+		else if (fitnesses[populationCounter] > secondFitness)
+		{
+			secondFitness = fitnesses[populationCounter];
+			secondFitnessIndex = populationCounter;
+		}
+	}
+
+	cout << "Generation:\t\t" << 0 << "\n";
+	cout << "Parent 1 Win Rate:\t" << (long double)maxFitness / (gamesPerCompetition * (populationSize - 1)) << "\n"
+		<< "Parent 2 Win Rate:\t" << (long double)secondFitness / (gamesPerCompetition * (populationSize - 1)) << "\n"
+		<< endl;
+
+	for (size_t geneCounter = 0; geneCounter < agents[maxFitnessIndex].Weights().size(); geneCounter++)
+	{
+		cout << agents[maxFitnessIndex].Weights()[geneCounter] << ", ";
+	}
+	cout << "\n" << endl;
+
 	// loop per generation
 	for (size_t generationCounter = 0; generationCounter < generations; generationCounter++)
 	{
@@ -403,10 +467,12 @@ Minimax ConnectFour::EvolveAgent(const Minimax& parent, size_t populationSize, s
 		zygote = Breed(agents[maxFitnessIndex].Weights(), agents[secondFitnessIndex].Weights(), mixingRatio);
 
 		// initalize next generation
-		agents.clear();
 		for (size_t populationCounter = 0; populationCounter < populationSize; populationCounter++)
 		{
-			agents.emplace_back(1, Mutate(zygote, mutationRate));
+			if (populationCounter != maxFitnessIndex)
+			{
+				agents[populationCounter] = Minimax(searchDepth, Mutate(zygote, mutationRate));
+			}
 		}
 
 		// compete and record fitnesses as # of wins
@@ -451,7 +517,7 @@ Minimax ConnectFour::EvolveAgent(const Minimax& parent, size_t populationSize, s
 
 		for (size_t geneCounter = 0; geneCounter < agents[maxFitnessIndex].Weights().size(); geneCounter++)
 		{
-			cout << agents[maxFitnessIndex].Weights()[geneCounter] << ' ';
+			cout << agents[maxFitnessIndex].Weights()[geneCounter] << ", ";
 		}
 		cout << "\n" << endl;
 	}
@@ -517,17 +583,19 @@ void ConnectFour::HumanVsAI()
 		<< "1) Caprice\n"
 		<< "2) Dorothy\n"
 		<< "3) Beatrice\n"
+		<< "4) Milagro\n"
 		<< endl;
 	getline(cin, input);
 	while (input.length() != 1 ||
 		!isdigit(input[0]) ||
-		stoi(input) < 1 || 3 < stoi(input))
+		stoi(input) < 1 || 4 < stoi(input))
 	{
 		cout << "\nThat was not a valid option.\n"
 			<< "To select an AI, enter the number left of the AI\'s name.\n"
 			<< "1) Caprice\n"
 			<< "2) Dorothy\n"
 			<< "3) Beatrice\n"
+			<< "4) Milagro\n"
 			<< endl;
 		getline(cin, input);
 	}
@@ -540,6 +608,8 @@ void ConnectFour::HumanVsAI()
 		agent = new MinimaxDefensive;
 	case 3:
 		agent = new MinimaxAll;
+	case 4:
+		agent = new MinimaxTunedD1;
 	}
 	system("cls");
 	cout << "Human vs AI\n"
@@ -627,12 +697,10 @@ void ConnectFour::AIVsAI()
 
 pair<size_t, size_t> ConnectFour::Compete(Agent& agent1, Agent& agent2, size_t games)
 {
-	random_device seeder;
-	minstd_rand rng(seeder());
+	bool agent1First = true;
 	size_t agent1Wins = 0, agent2Wins = 0, ties = 0;
-	for (size_t gameCounter = 0; gameCounter < games; gameCounter++)
+	for (size_t gameCounter = 0; gameCounter < games; gameCounter++, agent1First = !agent1First)
 	{
-		bool agent1First = rng() % 2;
 		Board b;
 		for (unsigned short i = 0; b.Winner() == ' ' && !b.IsFull(); i++)
 		{

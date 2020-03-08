@@ -10,6 +10,9 @@
 #include "minimax_defensive.h"
 #include "minimax_offensive.h"
 #include "minimax_all.h"
+#include "minimax_tuned_d1.h"
+#include "minimax_tuned_d2.h"
+#include "minimax_tuned_d3.h"
 
 using namespace std;
 
@@ -22,9 +25,14 @@ int main()
 	MinimaxAll allAgent;
 	MinimaxOffensive offensiveAgent;
 	MinimaxDefensive defensiveAgent;
-	Minimax&& tunedAgent = ConnectFour::Evolve(10, 1, 100, 1000, 0.8l, 0.5l);
+	MinimaxTunedD1 pretunedD1;
+	MinimaxTunedD2 pretunedD2;
+	MinimaxTunedD3 pretunedD3;
 
-	ConnectFour::TestDouble(tunedAgent, defensiveAgent, 1000);
+	//Minimax&& tunedAgent = ConnectFour::Evolve(3, 5, 2, 100, 10.0l, 0.8l, 0.5l);
+	//Minimax&& tunedAgent = ConnectFour::EvolveAgent(pretunedD1, 1, 5, 2, 100, 0.8l, 0.3l);
+
+	ConnectFour::TestDouble(pretunedD1, defensiveAgent, 100);
 
 	//ConnectFour::Play();
 

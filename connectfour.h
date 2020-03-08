@@ -12,8 +12,8 @@ public:
 	static void TrainSingle(ASRLC4&, Agent&, size_t);
 	static void TestDouble(Agent&, Agent&, size_t);
 	static void PlayDouble(Agent&, Agent&);
-	static Minimax Evolve(size_t, size_t, size_t, long double, long double, long double);
-	static Minimax EvolveAgent(const Minimax&, size_t, size_t, size_t, long double, long double);
+	static Minimax Evolve(size_t, size_t, size_t, size_t, long double, long double, long double);
+	static Minimax EvolveAgent(const Minimax&, size_t, size_t, size_t, size_t, long double, long double);
 
 private:
 	static void HumanVsHuman();

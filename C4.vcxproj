@@ -147,6 +147,9 @@
     <ClCompile Include="minimax_all.cpp" />
     <ClCompile Include="minimax_defensive.cpp" />
     <ClCompile Include="minimax_offensive.cpp" />
+    <ClCompile Include="minimax_tuned_d1.cpp" />
+    <ClCompile Include="minimax_tuned_d2.cpp" />
+    <ClCompile Include="minimax_tuned_d3.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="rpo.cpp" />
   </ItemGroup>
@@ -160,6 +163,9 @@
     <ClInclude Include="minimax_all.h" />
     <ClInclude Include="minimax_defensive.h" />
     <ClInclude Include="minimax_offensive.h" />
+    <ClInclude Include="minimax_tuned_d1.h" />
+    <ClInclude Include="minimax_tuned_d2.h" />
+    <ClInclude Include="minimax_tuned_d3.h" />
     <ClInclude Include="random.h" />
     <ClInclude Include="rpo.h" />
   </ItemGroup>
