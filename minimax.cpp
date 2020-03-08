@@ -29,6 +29,10 @@ Minimax::Minimax(size_t d,
 {
 }
 
+Minimax::Minimax(size_t d, vector<EvaluationFunction::utility> u) : searchDepth(d), value(u)
+{
+}
+
 Board::z Minimax::TakeTurn(const Board& b) noexcept
 {
 	vector<pair<Board, Board::z>> possibleMoves = b.Successors();
@@ -47,6 +51,11 @@ Board::z Minimax::TakeTurn(const Board& b) noexcept
 		}
 	}
 	return bestMove;
+}
+
+vector<EvaluationFunction::utility> Minimax::Weights() const
+{
+	return value.Weights();
 }
 
 EvaluationFunction::utility Minimax::minimax(const Board& b, Board::z move, size_t depth)

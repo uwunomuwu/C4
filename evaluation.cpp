@@ -1,4 +1,5 @@
 #include "evaluation.h"
+#include <cmath>
 
 EvaluationFunction::EvaluationFunction(const EvaluationFunction& other)
 {
@@ -64,6 +65,34 @@ EvaluationFunction::EvaluationFunction(
 	weights[tie] = tieWeight;
 }
 
+EvaluationFunction::EvaluationFunction(const vector<utility>& utilities)
+{
+	if (utilities.size() != 19)
+	{
+		throw exception("Invalid number of weights.");
+	}
+
+	weights[totalDoubles] = utilities[0];
+	weights[totalTriples] = utilities[1];
+	weights[totalPenultimateTriples] = utilities[2];
+	weights[totalAntepenultimateTriples] = utilities[3];
+	weights[marginalDoubles] = utilities[4];
+	weights[marginalTriples] = utilities[5];
+	weights[marginalPenultimateTriples] = utilities[6];
+	weights[marginalAntepenultimateTriples] = utilities[7];
+	weights[totalDoublesOpponent] = utilities[8];
+	weights[totalTriplesOpponent] = utilities[9];
+	weights[totalPenultimateTriplesOpponent] = utilities[10];
+	weights[totalAntepenultimateTriplesOpponent] = utilities[11];
+	weights[marginalDoublesOpponent] = utilities[12];
+	weights[marginalTriplesOpponent] = utilities[13];
+	weights[marginalPenultimateTriplesOpponent] = utilities[14];
+	weights[marginalAntepenultimateTriplesOpponent] = utilities[15];
+	weights[win] = utilities[16];
+	weights[winOpponent] = utilities[17];
+	weights[tie] = utilities[18];
+}
+
 EvaluationFunction::utility EvaluationFunction::operator()(char player, const Board& current, Board::z action) const
 {
 	char opponent;
@@ -98,7 +127,7 @@ EvaluationFunction::utility EvaluationFunction::operator()(char player, const Bo
 	value -= (weights.at(marginalAntepenultimateTriplesOpponent) * (TotalAntepenultimateTriples(evaluating, opponent) - TotalAntepenultimateTriples(current, opponent)));
 	value += (weights.at(win) * (evaluating.Winner() == player) ? 1.0l : 0.0l);
 	value -= (weights.at(winOpponent) * (evaluating.Winner() == opponent) ? 1.0l : 0.0l);
-	value += (weights.at(tie) * (evaluating.IsFull() && evaluating.Winner() == ' ') ? 1.0l : 0.0l);
+	value += (log(weights.at(tie)) * (evaluating.IsFull() && evaluating.Winner() == ' ') ? 1.0l : 0.0l);
 
 	return value;
 }
@@ -121,6 +150,16 @@ EvaluationFunction::utility EvaluationFunction::operator()(char player, const Bo
 	value += (weights.at(tie) * (current.IsFull() && current.Winner() == ' ') ? 1.0l : 0.0l);
 
 	return value;
+}
+
+vector<EvaluationFunction::utility> EvaluationFunction::Weights() const
+{
+	vector<utility> returnValue;
+	for (map<statistics, utility>::const_iterator weightsIterator = weights.cbegin(); weightsIterator != weights.cend(); weightsIterator++)
+	{
+		returnValue.push_back(weightsIterator->second);
+	}
+	return returnValue;
 }
 
 EvaluationFunction::utility EvaluationFunction::TotalDoubles(const Board& b, char c)

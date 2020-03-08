@@ -18,12 +18,15 @@ vector<Board> GetSuccessors(Board);
 
 int main()
 {
-	MinimaxAll allAgent;
-	MinimaxDefensive defensiveAgent;
 	Random randomAgent;
-	//ConnectFour::TestDouble(allAgent, randomAgent, 1000);
+	MinimaxAll allAgent;
+	MinimaxOffensive offensiveAgent;
+	MinimaxDefensive defensiveAgent;
+	Minimax&& tunedAgent = ConnectFour::Evolve(10, 1, 100, 1000, 0.8l, 0.5l);
 
-	ConnectFour::Play();
+	ConnectFour::TestDouble(tunedAgent, defensiveAgent, 1000);
+
+	//ConnectFour::Play();
 
 	// Don't try this unless have supercomputer.
 	// GenerateStateSpace();

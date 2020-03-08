@@ -38,8 +38,10 @@ public:
 	EvaluationFunction& operator=(EvaluationFunction&&) noexcept;
 	~EvaluationFunction() = default;
 	EvaluationFunction(utility, utility, utility, utility, utility, utility, utility, utility, utility, utility, utility, utility, utility, utility, utility, utility, utility, utility, utility);
+	EvaluationFunction(const vector<utility>&);
 	utility operator()(char, const Board&, Board::z) const;
 	utility operator()(char, const Board&) const;
+	vector<utility> Weights() const;
 
 private:
 	map<statistics, utility> weights;
