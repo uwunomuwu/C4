@@ -6,6 +6,7 @@
 #include "minimax_defensive.h"
 #include "minimax_all.h"
 #include "minimax_tuned_d1.h"
+#include "minimax_ace.h"
 #include <iostream>
 #include <string>
 #include <random>
@@ -584,11 +585,12 @@ void ConnectFour::HumanVsAI()
 		<< "2) Dorothy\n"
 		<< "3) Beatrice\n"
 		<< "4) Milagro\n"
+		<< "5) Ace\n"
 		<< endl;
 	getline(cin, input);
 	while (input.length() != 1 ||
 		!isdigit(input[0]) ||
-		stoi(input) < 1 || 4 < stoi(input))
+		stoi(input) < 1 || 5 < stoi(input))
 	{
 		cout << "\nThat was not a valid option.\n"
 			<< "To select an AI, enter the number left of the AI\'s name.\n"
@@ -596,6 +598,7 @@ void ConnectFour::HumanVsAI()
 			<< "2) Dorothy\n"
 			<< "3) Beatrice\n"
 			<< "4) Milagro\n"
+			<< "5) Ace\n"
 			<< endl;
 		getline(cin, input);
 	}
@@ -610,6 +613,8 @@ void ConnectFour::HumanVsAI()
 		agent = new MinimaxAll;
 	case 4:
 		agent = new MinimaxTunedD1;
+	case 5:
+		agent = new MinimaxAce;
 	}
 	system("cls");
 	cout << "Human vs AI\n"

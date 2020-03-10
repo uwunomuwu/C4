@@ -54,6 +54,9 @@
     <ClCompile Include="minimax_tuned_d3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="minimax_ace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="board.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="minimax_tuned_d3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="minimax_ace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

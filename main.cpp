@@ -13,6 +13,7 @@
 #include "minimax_tuned_d1.h"
 #include "minimax_tuned_d2.h"
 #include "minimax_tuned_d3.h"
+#include "minimax_ace.h"
 
 using namespace std;
 
@@ -28,13 +29,14 @@ int main()
 	MinimaxTunedD1 pretunedD1;
 	MinimaxTunedD2 pretunedD2;
 	MinimaxTunedD3 pretunedD3;
+	MinimaxAce ace;
 
 	//Minimax&& tunedAgent = ConnectFour::Evolve(3, 5, 2, 100, 10.0l, 0.8l, 0.5l);
 	//Minimax&& tunedAgent = ConnectFour::EvolveAgent(pretunedD1, 1, 5, 2, 100, 0.8l, 0.3l);
 
-	ConnectFour::TestDouble(pretunedD1, defensiveAgent, 100);
+	//ConnectFour::TestDouble(ace, defensiveAgent, 100);
 
-	//ConnectFour::Play();
+	ConnectFour::Play();
 
 	// Don't try this unless have supercomputer.
 	// GenerateStateSpace();

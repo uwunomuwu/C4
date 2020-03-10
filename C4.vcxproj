@@ -144,6 +144,7 @@
     <ClCompile Include="evaluation.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="minimax.cpp" />
+    <ClCompile Include="minimax_ace.cpp" />
     <ClCompile Include="minimax_all.cpp" />
     <ClCompile Include="minimax_defensive.cpp" />
     <ClCompile Include="minimax_offensive.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="connectfour.h" />
     <ClInclude Include="evaluation.h" />
     <ClInclude Include="minimax.h" />
+    <ClInclude Include="minimax_ace.h" />
     <ClInclude Include="minimax_all.h" />
     <ClInclude Include="minimax_defensive.h" />
     <ClInclude Include="minimax_offensive.h" />
