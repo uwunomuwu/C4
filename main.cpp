@@ -22,19 +22,19 @@ vector<Board> GetSuccessors(Board);
 
 int main()
 {
-	Random randomAgent;
-	MinimaxAll allAgent;
-	MinimaxOffensive offensiveAgent;
-	MinimaxDefensive defensiveAgent;
-	MinimaxTunedD1 pretunedD1;
-	MinimaxTunedD2 pretunedD2;
-	MinimaxTunedD3 pretunedD3;
-	MinimaxAce ace;
+	//Random randomAgent;
+	//MinimaxAll allAgent;
+	//MinimaxOffensive offensiveAgent;
+	//MinimaxDefensive defensiveAgent;
+	//MinimaxTunedD1 pretunedD1;
+	//MinimaxTunedD2 pretunedD2;
+	//MinimaxTunedD3 pretunedD3;
+	//MinimaxAce ace;
 
 	//Minimax&& tunedAgent = ConnectFour::Evolve(3, 5, 2, 100, 10.0l, 0.8l, 0.5l);
 	//Minimax&& tunedAgent = ConnectFour::EvolveAgent(pretunedD1, 1, 5, 2, 100, 0.8l, 0.3l);
 
-	//ConnectFour::TestDouble(ace, defensiveAgent, 100);
+	//ConnectFour::TestDouble(pretunedD1, allAgent, 100);
 
 	ConnectFour::Play();
 

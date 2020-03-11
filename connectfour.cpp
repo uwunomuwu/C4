@@ -4,6 +4,7 @@
 #include "random.h"
 #include "rpo.h"
 #include "minimax_defensive.h"
+#include "minimax_offensive.h"
 #include "minimax_all.h"
 #include "minimax_tuned_d1.h"
 #include "minimax_ace.h"
@@ -21,19 +22,19 @@ void ConnectFour::Play()
 		<< "To select an option, enter the number left of the option.\n"
 		<< "1) Human vs Human\n"
 		<< "2) Human vs AI\n"
-		<< "3) AI vs AI\n"
+		//<< "3) AI vs AI\n"
 		<< endl;
 	string input;
 	getline(cin, input);
 	while (input.length() != 1 ||
 		!isdigit(input[0]) ||
-		stoi(input) < 1 || 3 < stoi(input))
+		stoi(input) < 1 || 2 < stoi(input))
 	{
 		cout << "\nThat was not a valid option.\n"
 			<< "To select an option, enter the number left of the option.\n"
 			<< "1) Human vs Human\n"
 			<< "2) Human vs AI\n"
-			<< "3) AI vs AI\n"
+			//<< "3) AI vs AI\n"
 			<< endl;
 		getline(cin, input);
 	}
@@ -45,9 +46,9 @@ void ConnectFour::Play()
 	case 2:
 		HumanVsAI();
 		break;
-	case 3:
+	/*case 3:
 		AIVsAI();
-		break;
+		break;*/
 	default:
 		break;
 	}
@@ -581,11 +582,11 @@ void ConnectFour::HumanVsAI()
 	cout << "Human vs AI\n"
 		<< "\n"
 		<< "To select an AI, enter the number left of the AI\'s name.\n"
-		<< "1) Caprice\n"
-		<< "2) Dorothy\n"
-		<< "3) Beatrice\n"
-		<< "4) Milagro\n"
-		<< "5) Ace\n"
+		<< "1) Caprice (Random)\n"
+		<< "2) Dorothy (Defensive)\n"
+		<< "3) Olaf (Offensive)\n"
+		<< "4) Beatrice (Mixed)\n"
+		<< "5) Milagro (Genetic)\n"
 		<< endl;
 	getline(cin, input);
 	while (input.length() != 1 ||
@@ -594,11 +595,11 @@ void ConnectFour::HumanVsAI()
 	{
 		cout << "\nThat was not a valid option.\n"
 			<< "To select an AI, enter the number left of the AI\'s name.\n"
-			<< "1) Caprice\n"
-			<< "2) Dorothy\n"
-			<< "3) Beatrice\n"
-			<< "4) Milagro\n"
-			<< "5) Ace\n"
+			<< "1) Caprice (Random)\n"
+			<< "2) Dorothy (Defensive)\n"
+			<< "3) Olaf (Offensive)\n"
+			<< "4) Beatrice (Mixed)\n"
+			<< "5) Milagro (Genetic)\n"
 			<< endl;
 		getline(cin, input);
 	}
@@ -609,12 +610,16 @@ void ConnectFour::HumanVsAI()
 		break;
 	case 2:
 		agent = new MinimaxDefensive;
+		break;
 	case 3:
-		agent = new MinimaxAll;
+		agent = new MinimaxOffensive;
+		break;
 	case 4:
-		agent = new MinimaxTunedD1;
+		agent = new MinimaxAll;
+		break;
 	case 5:
-		agent = new MinimaxAce;
+		agent = new MinimaxTunedD1;
+		break;
 	}
 	system("cls");
 	cout << "Human vs AI\n"
