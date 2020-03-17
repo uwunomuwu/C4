@@ -14,6 +14,7 @@
 #include "minimax_tuned_d2.h"
 #include "minimax_tuned_d3.h"
 #include "minimax_ace.h"
+#include <string>
 
 using namespace std;
 
@@ -36,13 +37,27 @@ int main()
 
 	//ConnectFour::TestDouble(pretunedD1, allAgent, 100);
 
-	ConnectFour::Play();
+	string input;
+
+	do
+	{
+		ConnectFour::Play();
+
+		system("pause");
+
+		system("cls");
+		cout << "Enter 1 to play again.\n"
+			<< "Enter anything else to quit.\n"
+			<< endl;
+		getline(cin, input);
+	}
+	while (input == "1");
+
+	//system("pause");
+	return EXIT_SUCCESS;
 
 	// Don't try this unless have supercomputer.
 	// GenerateStateSpace();
-
-	system("pause");
-	return EXIT_SUCCESS;
 }
 
 void GenerateStateSpace()
